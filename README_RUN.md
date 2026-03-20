@@ -31,10 +31,11 @@ bash scripts/run-local-docker.sh
 
 This script runs:
 - `docker compose up -d --build`
-- `composer install` (only if `vendor/` is missing)
+- `composer install` (only if `vendor/autoload.php` is missing in container)
 - Yii2 migrations for the main DB
 - `yii seed/all` (10 users, 100 albums, 1000 photos)
 - Yii2 migrations for the test DB (`yii2basic_test`, for Codeception)
+- Unit tests + functional API tests (when `--with-tests` is provided)
 
 Optional: run tests too
 ```bash

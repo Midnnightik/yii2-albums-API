@@ -5,6 +5,17 @@
  */
 class ApiCest
 {
+    private function createUser(\FunctionalTester $I, string $username, string $firstName, string $lastName): int
+    {
+        return $I->haveRecord(\app\models\User::class, [
+            'username' => $username,
+            'auth_key' => \Yii::$app->security->generateRandomString(32),
+            'password_hash' => \Yii::$app->security->generatePasswordHash('test-password'),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+        ]);
+    }
+
     public function usersListJsonShape(\FunctionalTester $I)
     {
         $I->amOnRoute('users/index', ['page' => 1, 'per-page' => 5]);
@@ -24,15 +35,14 @@ class ApiCest
 
     public function userDetailIncludesAlbums(\FunctionalTester $I)
     {
-        $admin = \app\models\User::findByUsername('admin');
-        \PHPUnit\Framework\Assert::assertNotNull($admin);
+        $userId = $this->createUser($I, 'api_ctest_user_1', 'API', 'User1');
 
         $I->haveRecord(\app\models\Album::class, [
-            'user_id' => $admin->id,
+            'user_id' => $userId,
             'title' => 'api_ctest_album',
         ]);
 
-        $I->amOnRoute('users/view', ['id' => $admin->id]);
+        $I->amOnRoute('users/view', ['id' => $userId]);
         $I->seeResponseCodeIs(200);
         $data = json_decode($I->grabPageSource(), true);
         foreach (['id', 'first_name', 'last_name', 'albums'] as $k) {
@@ -63,11 +73,10 @@ class ApiCest
 
     public function albumDetailIncludesPhotosWithUrl(\FunctionalTester $I)
     {
-        $admin = \app\models\User::findByUsername('admin');
-        \PHPUnit\Framework\Assert::assertNotNull($admin);
+        $userId = $this->createUser($I, 'api_ctest_user_2', 'API', 'User2');
 
         $albumId = $I->haveRecord(\app\models\Album::class, [
-            'user_id' => $admin->id,
+            'user_id' => $userId,
             'title' => 'api_ctest_album_photos',
         ]);
 

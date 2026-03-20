@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-bookworm
+FROM php:8.3-fpm-bookworm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git unzip libicu-dev libzip-dev libpng-dev \

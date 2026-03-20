@@ -32,9 +32,9 @@ done
 echo "Starting containers..."
 $COMPOSE_CMD up -d --build
 
-if [[ ! -d "vendor" ]]; then
-  echo "Installing composer dependencies (vendor missing)..."
-  $COMPOSE_CMD exec -T php composer install --no-interaction
+if ! $COMPOSE_CMD exec -T php sh -lc 'test -f vendor/autoload.php'; then
+  echo "Installing composer dependencies (vendor/autoload.php missing in container)..."
+  $COMPOSE_CMD exec -T php sh -lc 'git config --global --add safe.directory /var/www/html || true; composer install --no-interaction'
 fi
 
 echo "Migrating main DB..."
@@ -74,6 +74,8 @@ if [[ "$MODE" == "all" || "$WITH_TESTS" == "1" ]]; then
 fi
 
 if [[ "$WITH_TESTS" == "1" ]]; then
+  echo "Running unit tests..."
+  $COMPOSE_CMD exec -T php vendor/bin/codecept run unit
   echo "Running functional API tests..."
   $COMPOSE_CMD exec -T php vendor/bin/codecept run functional ApiCest.php
 fi
