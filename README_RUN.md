@@ -24,7 +24,36 @@
 3. Ensure you do NOT commit `config/seed_password_local.php` (it is gitignored).
 
 ### 2) Run everything with one script
-From `/var/www/yii2-albums-api`:
+
+**Execute permission (Linux / macOS):** after `git clone`, the shell script may not be executable. Either run it explicitly with Bash (no `chmod` needed):
+
+```bash
+bash scripts/run-local-docker.sh
+```
+
+or mark it executable once:
+
+```bash
+chmod +x scripts/run-local-docker.sh
+./scripts/run-local-docker.sh
+```
+
+On Unix you can also run `make run-local` (calls `bash scripts/run-local-docker.sh` so the script does not need the execute bit).
+
+**Windows:** use PowerShell from the project root:
+
+```powershell
+pwsh scripts/run-local-docker.ps1
+```
+
+Optional tests:
+
+```powershell
+pwsh scripts/run-local-docker.ps1 --with-tests
+```
+
+From `/var/www/yii2-albums-api` (or project root):
+
 ```bash
 bash scripts/run-local-docker.sh
 ```

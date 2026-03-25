@@ -30,10 +30,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => true,
             'rules' => [
-                'users' => 'users/index',
-                'users/<id:\d+>' => 'users/view',
-                'albums' => 'albums/index',
-                'albums/<id:\d+>' => 'albums/view',
+                'users' => 'api/users',
+                'users/<id:\d+>' => 'api/user',
+                'albums' => 'api/albums',
+                'albums/<id:\d+>' => 'api/album',
             ],
         ],
         'user' => [

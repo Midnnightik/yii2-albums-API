@@ -18,7 +18,7 @@ class ApiCest
 
     public function usersListJsonShape(\FunctionalTester $I)
     {
-        $I->amOnRoute('users/index', ['page' => 1, 'per-page' => 5]);
+        $I->amOnRoute('api/users', ['page' => 1, 'per-page' => 5]);
         $I->seeResponseCodeIs(200);
         $data = json_decode($I->grabPageSource(), true);
         verify($data)->arrayHasKey('items');
@@ -42,7 +42,7 @@ class ApiCest
             'title' => 'api_ctest_album',
         ]);
 
-        $I->amOnRoute('users/view', ['id' => $userId]);
+        $I->amOnRoute('api/user', ['id' => $userId]);
         $I->seeResponseCodeIs(200);
         $data = json_decode($I->grabPageSource(), true);
         foreach (['id', 'first_name', 'last_name', 'albums'] as $k) {
@@ -59,7 +59,7 @@ class ApiCest
 
     public function albumsListJsonShape(\FunctionalTester $I)
     {
-        $I->amOnRoute('albums/index', ['page' => 1, 'per-page' => 10]);
+        $I->amOnRoute('api/albums', ['page' => 1, 'per-page' => 10]);
         $I->seeResponseCodeIs(200);
         $data = json_decode($I->grabPageSource(), true);
         verify($data)->arrayHasKey('items');
@@ -85,7 +85,7 @@ class ApiCest
             'title' => 'api_ctest_photo',
         ]);
 
-        $I->amOnRoute('albums/view', ['id' => $albumId]);
+        $I->amOnRoute('api/album', ['id' => $albumId]);
         $I->seeResponseCodeIs(200);
         $data = json_decode($I->grabPageSource(), true);
         foreach (['id', 'first_name', 'last_name', 'photos'] as $k) {
@@ -101,7 +101,7 @@ class ApiCest
 
     public function userNotFound(\FunctionalTester $I)
     {
-        $I->amOnRoute('users/view', ['id' => 999999999]);
+        $I->amOnRoute('api/user', ['id' => 999999999]);
         $I->seeResponseCodeIs(404);
     }
 }
